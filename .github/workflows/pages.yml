@@ -1,0 +1,43 @@
+name: Deploy website to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Restore verified website backup
+        env:
+          BACKUP_URL: https://github.com/Saber0015/fuchen-afterlight-website/releases/download/backup-2026-09-29/fuchen-afterlight-full-backup-20260929.zip
+          BACKUP_SHA256: b14e17bc4f5536865315f31bf7480e98a0d695364cdf1fcc94208f8965dc3015
+        run: |
+          curl --fail --location --retry 3 "$BACKUP_URL" --output backup.zip
+          printf '%s  backup.zip\n' "$BACKUP_SHA256" | sha256sum --check
+          unzip -q backup.zip -d restored
+          node scripts/prepare-pages.mjs restored/fuchen-afterlight _site '/fuchen-afterlight-website/'
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

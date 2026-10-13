@@ -1,6 +1,18 @@
 # 富晨 · Afterlight 网站备份
 
-完整网站保存在本仓库的 **Releases 附件**中，仓库为私有。
+完整网站保存在本仓库的 **Releases 附件**中，仓库目前为公开。
+
+## 在线网站
+
+**[访问富晨 · Afterlight 网站](https://saber0015.github.io/fuchen-afterlight-website/)**
+
+GitHub Pages 由 `.github/workflows/pages.yml` 自动发布。每次更新 `main` 或手动运行工作流时，下载下方固定版本的完整备份，校验压缩包和 116 个网站文件的 SHA-256，再将 `public/` 的 18 个静态页面发布到 Pages。
+
+`scripts/prepare-pages.mjs` 将页面、图片和脚本链接适配到 `/fuchen-afterlight-website/` 项目路径，保留四语切换、产品详情及询价草稿功能。原始素材、研究与测试记录保留在备份中；发布内容来自 `public/`。
+
+GitHub 仓库 **Settings → Pages → Source** 使用 **GitHub Actions**。查看发布状态：[Actions](https://github.com/Saber0015/fuchen-afterlight-website/actions/workflows/pages.yml)。
+
+后续更换网站版本时，更新工作流中的 `BACKUP_URL` 和 `BACKUP_SHA256`。如页面数量发生变化，同时更新准备脚本中的页面数量校验。
 
 **[下载完整网站备份（约 38 MB）](https://github.com/Saber0015/fuchen-afterlight-website/releases/download/backup-2026-09-29/fuchen-afterlight-full-backup-20260929.zip)**  
 [查看备份版本和校验文件](https://github.com/Saber0015/fuchen-afterlight-website/releases/tag/backup-2026-09-29)
